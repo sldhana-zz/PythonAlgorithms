@@ -6,3 +6,6 @@ lib/*
 include/*
 .Python
 pip-selfcheck.json
+share/*
+local/*
+local

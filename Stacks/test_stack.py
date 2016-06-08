@@ -1,4 +1,3 @@
-import pytest
 from Stacks.stack import Stack
 
 s = Stack()
