@@ -1,5 +1,5 @@
 from Stacks.stack import Stack
-
+from utility.utility import is_number
 
 PRECEDENCE = {
     '^': 3,
@@ -10,18 +10,17 @@ PRECEDENCE = {
 }
 BRACKETS = ['(', ')']
 APPROVED_APLPHABETS = 'ABCDEFGHIJKLMNOPQESTUVWXYZ'
-APPROVED_NUMBERS = '0123456789'
 
 def infix_to_postfix(expression):
     operator_stack = Stack()
-    converted = ''
+    converted = []
+    expression = expression.split(' ')
     alphabets = list(APPROVED_APLPHABETS)
-    numbers = list(APPROVED_NUMBERS)
 
     for character in expression:
         # check if the character is a number or an alphabet, if so, add directly to the converted string
-        if character in alphabets or character in numbers:
-            converted = converted + character
+        if character in alphabets or is_number(character):
+            converted.append(character)
         else:
             # if character is an operand, use the precedence dictionary to figure weight
             if character in PRECEDENCE:
@@ -32,7 +31,7 @@ def infix_to_postfix(expression):
                     # If it's not a '(', then check the precedence. Only add if current character precedence is lower.
                     # Else, pop off the current item, add it to the converted string, and then push the current character.
                     elif PRECEDENCE[operator_stack.peek()] >= PRECEDENCE[character]:
-                        converted = converted + operator_stack.pop()
+                        converted.append(operator_stack.pop())
                         operator_stack.push(character)
                     # If smaller precedence, just add to operator stack.
                     else:
@@ -49,7 +48,7 @@ def infix_to_postfix(expression):
                     # pop the stack until find the matching '('
                     while not operator_stack.is_empty():
                         if operator_stack.peek() != '(':
-                            converted = converted + operator_stack.pop()
+                            converted.append(operator_stack.pop())
                         else:
 
                             operator_stack.pop()
@@ -57,7 +56,7 @@ def infix_to_postfix(expression):
 
     # no more character, pop stack and add to converted
     while not operator_stack.is_empty():
-        converted = converted + operator_stack.pop()
-        
-    return converted
+        converted.append(operator_stack.pop())
+
+    return ' '.join(converted)
 
